@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!--NameSpace 任意起名字，就是这个Mapper.xml的身份标签-->
+<mapper namespace="aaa">
+
+    <select id="bbb" resultType="com.cskaoyan.dto.User">
+        select * from user where id = 33021
+    </select>
+
+    <select id="ccc" resultType="com.cskaoyan.dto.User">
+        select * from user where id = 33022
+    </select>
+
+
+    <insert id="insertUser" parameterType="com.cskaoyan.dto.User">
+        insert into user2 values (#{id}, #{username}, #{password},#{age})
+    </insert>
+
+    <delete id="deleteUserById" parameterType="java.lang.Integer" >
+
+        delete from user2 where id = #{id}
+
+    </delete>
+
+    <update id="updateUserById" parameterType="java.lang.String">
+        update user2 set username = #{username}
+    </update>
+
+    <select id="selectList" resultType="com.cskaoyan.dto.User">
+        select * from user2
+    </select>
+
+</mapper>

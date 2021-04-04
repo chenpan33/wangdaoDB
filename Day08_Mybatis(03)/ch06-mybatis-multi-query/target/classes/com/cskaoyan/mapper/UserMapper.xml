@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!--NameSpace 任意起名字，就是这个Mapper.xml的身份标签-->
+<mapper namespace="com.cskaoyan.mapper.UserMapper">
+
+    <resultMap id="userMap" type="com.cskaoyan.dto.User">
+
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="age" property="age"/>
+
+        <association property="userDetail" javaType="com.cskaoyan.dto.UserDetail">
+            <result column="did" property="id"/>
+            <result column="pic" property="pic"/>
+            <result column="sign" property="sign"/>
+            <result column="userid" property="userId"/>
+        </association>
+
+    </resultMap>
+    <select id="selectUserWithDetailById" resultMap="userMap">
+        SELECT
+                u.id as id,
+                u.username as username,
+                u.password as password,
+                u.age as age,
+                d.id as did,
+                d.pic as pic,
+                d.sign as sign,
+                d.user_id as userid
+        FROM
+                user2 AS u,
+                user_detail AS d
+        WHERE
+                u.id = d.user_id
+          and u.id = #{id}
+    </select>
+</mapper>

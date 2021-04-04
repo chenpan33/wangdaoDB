@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mapper.ClazzMapper">
+
+
+    <resultMap id="classMap" type="com.cskaoyan.dto.Clazz">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+
+        <collection property="studentList" ofType="com.cskaoyan.dto.Student">
+            <result column="sid" property="id"/>
+            <result column="sname" property="name"/>
+            <result column="classid" property="classId"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectClazzWithStudentsByName" resultMap="classMap">
+        SELECT
+                c.id as id,
+                c.name as name,
+                s.id as sid,
+                s.name as sname,
+                s.class_id as classid
+        FROM
+                clazz AS c
+                        LEFT JOIN student AS s ON c.id = s.class_id
+        where c.`name` = #{name}
+
+    </select>
+
+    <!-- 分次查询-->
+
+    <resultMap id="classMap2" type="com.cskaoyan.dto.Clazz">
+
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+
+        <!-- 封装一个集合-->
+        <collection property="studentList"  javaType="list"  column="id"
+                    select="com.cskaoyan.mapper.ClazzMapper.selectStudentListByClassId"/>
+    </resultMap>
+
+
+    <select id="selectClazzWithStudentsByName2" resultMap="classMap2">
+
+        select id,name  from clazz where name = #{name}
+
+    </select>
+
+
+
+    <select id="selectStudentListByClassId" resultType="com.cskaoyan.dto.Student">
+        SELECT
+                id as id ,name as name , class_id as classId
+        from student
+        where class_id = #{classId}
+    </select>
+</mapper>

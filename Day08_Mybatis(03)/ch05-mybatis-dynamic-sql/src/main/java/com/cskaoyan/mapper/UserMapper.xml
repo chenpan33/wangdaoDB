@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!--NameSpace 任意起名字，就是这个Mapper.xml的身份标签-->
+<mapper namespace="com.cskaoyan.mapper.UserMapper">
+
+    <sql id="base_select" >
+        select id,username,password,age from user2
+    </sql>
+
+    <sql id="base_column">
+        id,username,password,age
+    </sql>
+
+
+
+
+    <select id="selectUserByIdAndUserName" resultType="com.cskaoyan.dto.User">
+
+        select * from user2
+          <where>
+              id = #{id}
+              and username = #{username}
+          </where>
+    </select>
+
+    <!--
+    1. if test="判别式"
+        上面的判别式是OGNL表达式，其实就是一个特殊的取值的表达式，这个表达式的结果必须是一个boolean类型的值
+        这个里面有几个需要注意的地方，关于大于和小于的写法要写成他规定的字符
+
+        不等于   a != b
+        不为空   != null
+        大于     gt (greater than)
+        小于     lt (less than)
+        大于等于 gte(greater than equals)
+        小于等于 lte(less than equals)
+
+    2. 关于XML文本里面的转义字符 （特殊字符）
+
+        &       &amp;
+        >       &gt;
+        <       &lt;
+        >=      &gt;=
+        <=      &lt;=
+    -->
+    <select id="selectUserLisyByAge" resultType="com.cskaoyan.dto.User">
+
+
+        select * from user2
+        <where>
+            <if test="age gt 20">
+                age &gt; 20
+            </if>
+            <if test="age lte 20">
+                age &lt;= 20
+            </if>
+        </where>
+
+    </select>
+
+    <select id="selectUserBySelf" resultType="com.cskaoyan.dto.User">
+
+        select * from user2
+        <where>
+            <if test="user.id != null">
+                or id = #{user.id}
+            </if>
+            <if test="user.username != null">
+                and username = #{user.username}
+            </if>
+            <if test="user.password != null">
+                and password = #{user.password}
+            </if>
+            <if test="user.age != null">
+                and age = #{user.age}
+            </if>
+        </where>
+    </select>
+
+
+
+    <select id="selectUserLisyByAge2" resultType="com.cskaoyan.dto.User">
+
+        select * from user2
+        <where>
+            <choose>
+                <when test="age gt 20">
+                    age &gt; 20
+                </when>
+                <otherwise>
+                    age &lt;= 20
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+
+
+    <!--
+    trim 翻译过来是修剪的意思，作用是可以帮助我们动态的去拼接或者修剪我们的sql语句
+      标签里面有自己参数可以去设置
+        prefix          表示在头部拼接一个sql字段
+        suffix          表示在尾部拼接一个sql字段
+        prefixoverrides 表示去除在头部的指定的字符
+        suffixoverrides 表示去除在尾部指定的字符
+    -->
+    <update id="updateUserBySelf" parameterType="com.cskaoyan.dto.User">
+        <!--update user2 set username = #{user.username},-->
+                        <!--password = #{user.password},-->
+                        <!--age = #{user.age}-->
+        <!--where id = #{user.id}-->
+
+        update user2
+            <trim prefix="set" suffixOverrides=",">
+                <if test="user.username != null">
+                    username = #{user.username},
+                </if>
+                <if test="user.password != null">
+                    password = #{user.password},
+                </if>
+                <if test="user.age != null">
+                    age = #{user.age},
+                </if>
+            </trim>
+            <where>
+                id = #{user.id}
+            </where>
+    </update>
+
+
+    <!-- update user2 SET username = ? WHERE id = ?  -->
+    <update id="updateUserByIdWithSet">
+
+        update user2
+        <set>
+            <if test="user.username != null">
+                username = #{user.username},
+            </if>
+            <if test="user.password != null">
+                password = #{user.password},
+            </if>
+            <if test="user.age != null">
+                age = #{user.age},
+            </if>
+        </set>
+        <where>
+            id = #{user.id}
+        </where>
+    </update>
+
+
+
+
+
+    <select id="selectUserById" resultType="com.cskaoyan.dto.User">
+
+        select
+          <include refid="base_column"/>
+          from user2
+        where id = #{id}
+    </select>
+
+    <!--
+        collection: 这个是传进来的集合的名字 假如有@Param注解，那么就是注解的值，假如没有就是list/array
+        item: 表示集合中单个bean的名字
+        separator: 这个是表示我们的集合中的元素以什么符号分隔开
+        index: 表示下标
+        open: 其实是表示在我们这个循环拼接而成的sql语句之前加上一个特定的字符
+        close: 其实就是在我们这个循环拼接而成的sql语句的后面加上一个特定的字符
+
+
+    -->
+    <!--  insert into user2 values start (?, ?, ?, ?) , (?, ?, ?, ?) end   -->
+
+    <insert id="insertUserList" parameterType="com.cskaoyan.dto.User">
+        insert  into user2 values
+        <foreach collection="userList" item="user" separator="," index="index">
+            (#{user.id}, #{user.username}, #{user.password}, #{user.age})
+        </foreach>
+    </insert>
+
+
+    <insert id="insertUserList2" parameterType="com.cskaoyan.dto.User">
+        insert  into user2 values
+        <foreach collection="list" item="user" separator="," index="index">
+            (#{user.id}, #{user.username}, #{user.password}, #{user.age})
+        </foreach>
+    </insert>
+
+
+    <insert id="insertUserList3" parameterType="com.cskaoyan.dto.User">
+        insert  into user2 values
+        <foreach collection="array" item="user" separator="," index="index">
+            (#{user.id}, #{user.username}, #{user.password}, #{user.age})
+        </foreach>
+    </insert>
+
+    <insert id="insertUserList4" parameterType="com.cskaoyan.dto.User">
+        insert  into user2 values
+        <foreach collection="userarr" item="user" separator="," index="index">
+            (#{user.id}, #{user.username}, #{user.password}, #{user.age})
+        </foreach>
+    </insert>
+
+    <select id="selectUserListByIdList" resultType="com.cskaoyan.dto.User">
+        select <include refid="base_column"/>
+        from user2
+        <where>
+            id in
+            <foreach collection="idList" separator="," item="id" open="(" close=")">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+
+
+    <!--
+        order : 表示我们执行这个标签里面的sql语句的先后顺序
+                AFTER  表示在后面执行
+                BEFORE  表示在前面执行
+
+                keyProperty: 表示我们需要获取的数据封装到哪里
+                keyColumn: 表示你需要获取的是哪一列的数据
+                resultType: 这个是表示你获取到的返回值的类型
+    -->
+    <insert id="insertUser" parameterType="com.cskaoyan.dto.User">
+        <selectKey order="AFTER"  keyProperty="user.id" keyColumn="id" resultType="integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into user2 values (#{user.id}, #{user.username}, #{user.password}, #{user.age})
+    </insert>
+
+
+    <!--
+    useGeneratedKeys通常用来获取自增的主键值
+    -->
+    <insert id="insertUser2" parameterType="com.cskaoyan.dto.User" useGeneratedKeys="true" keyProperty="user.id">
+        insert into user2 values (#{user.id}, #{user.username}, #{user.password}, #{user.age})
+    </insert>
+
+
+</mapper>

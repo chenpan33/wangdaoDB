@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mapper.StudentMapper">
+
+
+    <resultMap id="studentMap" type="com.cskaoyan.dto.multi2multi.Student">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+
+        <collection property="courseList" ofType="com.cskaoyan.dto.multi2multi.Course">
+            <result column="cid" property="id"/>
+            <result column="cname" property="name"/>
+        </collection>
+
+    </resultMap>
+    <select id="selectStudentWithCoursesByName" resultMap="studentMap">
+        SELECT
+                s.id AS id,
+                s.NAME AS name,
+                s.age AS age,
+                c.id AS cid,
+                c.`name` AS cname
+        FROM
+                student AS s
+                        LEFT JOIN s_c AS sc ON s.id = sc.sid
+                        LEFT JOIN course AS c ON c.id = sc.cid
+        WHERE
+                s.NAME = #{name}
+    </select>
+</mapper>

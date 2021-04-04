@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mapper.ClazzMapper">
+
+
+    <resultMap id="classMap" type="com.cskaoyan.dto.Clazz">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+
+        <collection property="studentList" ofType="com.cskaoyan.dto.Student">
+            <result column="sid" property="id"/>
+            <result column="sname" property="name"/>
+            <result column="classid" property="classId"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectClazzWithStudentsByName" resultMap="classMap">
+        SELECT
+                c.id as id,
+                c.name as name,
+                s.id as sid,
+                s.name as sname,
+                s.class_id as classid
+        FROM
+                clazz AS c
+                        LEFT JOIN student AS s ON c.id = s.class_id
+        where c.`name` = #{name}
+
+    </select>
+</mapper>

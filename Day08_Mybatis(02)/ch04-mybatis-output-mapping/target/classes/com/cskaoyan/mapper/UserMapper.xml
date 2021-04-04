@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!--NameSpace 任意起名字，就是这个Mapper.xml的身份标签-->
+<mapper namespace="com.cskaoyan.mapper.UserMapper">
+
+    <!-- resultType不能省略, 可以使用别名   -->
+    <select id="selectUserAgeById" resultType="integer">
+        select age from user2 where id = #{adfnA}
+    </select>
+
+    <select id="selectCount" resultType="integer">
+        select count(1) from user
+    </select>
+
+
+    <select id="selectUserById" resultType="com.cskaoyan.dto.User">
+        select * from user2 where id = #{id}
+    </select>
+
+
+    <select id="selectUserById2" resultType="com.cskaoyan.dto.UserVO">
+        select id as id, username as name, password as passwd, age as age  from user2 where id = #{id}
+    </select>
+
+    <select id="selectUserNameList" resultType="string">
+        select username from user2
+    </select>
+
+
+    <select id="selectUserList" resultType="com.cskaoyan.dto.User">
+        select * from user2
+    </select>
+
+
+    <resultMap id="userVOMap" type="com.cskaoyan.dto.UserVO">
+    <!-- JdbcType JavaType 可以省略-->
+    <id property="id" column="id" />
+    <result column="username" property="name"/>
+    <result column="password" property="passwd"/>
+    <result column="age" property="age"/>
+</resultMap>
+
+    <select id="selectUserById3" parameterType="int" resultMap="userVOMap">
+        select * from user2 where id = #{id}
+    </select>
+
+
+
+    <select id="selectUserVOList" resultMap="userVOMap">
+        select * from user2
+    </select>
+
+</mapper>

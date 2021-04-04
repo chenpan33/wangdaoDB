@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+
+
+<configuration>
+
+    <!--加载properties 配置文件-->
+    <properties resource="jdbc.properties"/>
+
+
+    <!--日志配置-->
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+
+    <typeAliases>
+        <!--<typeAlias type="com.cskaoyan.dto.User" alias="user"/>-->
+        <package name="com.cskaoyan"/>
+    </typeAliases>
+
+
+    <!-- 这个是环境配置-->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driverClassName}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+
+    <!-- 把 我们自己写的UserMapper.xml 注册进来-->
+    <mappers>
+
+        <package name="com.cskaoyan.mapper"/>
+
+    </mappers>
+
+
+
+</configuration>

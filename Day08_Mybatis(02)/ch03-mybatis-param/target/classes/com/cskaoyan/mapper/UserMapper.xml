@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!--NameSpace 任意起名字，就是这个Mapper.xml的身份标签-->
+<mapper namespace="com.cskaoyan.mapper.UserMapper">
+
+<!--parameterType="int"-->
+
+    <select id="selectUserById"  resultType="com.cskaoyan.dto.User">
+        select * from user2 where id = #{id}
+    </select>
+
+    <select id="selectUserByIdAndUsername" resultType="com.cskaoyan.dto.User">
+        select * from user2 where id = #{id} and username = #{username}
+    </select>
+
+
+    <insert id="insertUser" parameterType="com.cskaoyan.dto.User">
+        insert into user2 values (#{id}, #{username}, #{password}, #{age})
+    </insert>
+
+    <insert id="insertUser2" parameterType="com.cskaoyan.dto.User">
+        insert into user2 values (#{user.id}, #{user.username}, #{user.password}, #{user.age})
+    </insert>
+
+
+    <select id="selectUserByMap" resultType="com.cskaoyan.dto.User">
+        select * from user2 where id = #{map.id} or username = #{map.username}
+    </select>
+
+
+    <select id="selectUserByIdAndUsername2" resultType="com.cskaoyan.dto.User">
+        select * from user2 where id = #{arg0} and username = #{arg1}
+    </select>
+
+    <select id="selectUserByIdAndUsername3" resultType="com.cskaoyan.dto.User">
+        select * from user2 where id = #{param1} and username = #{param2}
+    </select>
+
+
+    <select id="selectUserById$"  resultType="com.cskaoyan.dto.User">
+        select * from user2 where id = ${id}
+    </select>
+
+    <select id="selectUserListByTableName" resultType="com.cskaoyan.dto.User">
+        select * from ${tableName} limit 10
+    </select>
+
+
+    <select id="selectUserOrderBy" resultType="com.cskaoyan.dto.User">
+        select * from user2 order by #{columnName} limit 1
+    </select>
+
+
+</mapper>

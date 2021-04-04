@@ -1,0 +1,43 @@
+<project xmlns = "http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- 每一个xml文件都有一个约束文件 dtd文件 这个约束定义了这个xml文件里面的标签的名字，标签的顺序-->
+    <!--我们的dtd/xsd文件定义了我们的pom.xml文件必须得有 groupid、artifacted、modelVersion、version 这四个标签-->
+
+    <!--这 groupid、artifacted、version 三个标签组成了这个项目（module） 的坐标，每一个项目的坐标不能一样，组合起来不一样
+        要求他们三个只要有一个不一样就足够了
+    -->
+    <!-- 这个其实是和maven版本相关的，我们现在默认就是4.0.0，不需要大家来更改 -->
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <!-- 这个一般配置组织名，公司名  一般是域名反转-->
+    <groupId>com.cskaoyan</groupId>
+
+    <!-- 这个是你的项目的名字-->
+    <artifactId>cskaoyan</artifactId>
+    <!-- 软件（项目）的版本-->
+    <!-- 假如后面是 release,这个是公开发行版，这个很稳定 假如是bata，这个是一个公测版 可能存在bug,假如没有加版本号，一般可以认为这个版本是一个稳定版
+         假如是以0.x 开头版本号，你可以理解为这个软件还在一个测试阶段，这种版本一般都是一个稳定的版本-->
+    <version>1.0.0</version>
+
+
+    <!-- 声明我的这个项目需要哪些依赖 junit 需要去导包-->
+    <dependencies>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>compile</scope>
+        </dependency>
+
+
+    </dependencies>
+
+
+
+
+
+</project>
